@@ -20,14 +20,14 @@ var game = (function () {
     var delta;
 
     /* key codes */
-    var MOVE_UP = 38; //Arrow up
-    var MOVE_RIGHT = 39; //Arrow right
-    var MOVE_LEFT = 37; //Arrow left
-    var MOVE_DOWN = 40; //Arrow down
+    var UP = 38; //Arrow up
+    var RIGHT = 39; //Arrow right
+    var LEFT = 37; //Arrow left
+    var DOWN = 40; //Arrow down
 
     // Draws the canvas
     function privateDraw() {
-        privateContext.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        //privateContext.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         window.requestAnimationFrame(privateDraw);
 
         now = Date.now();
@@ -35,8 +35,11 @@ var game = (function () {
 
         if (delta > interval) {
             then = now - (delta % interval);
-            //console.log("Tick, now drawing with: " + FPS + "fps!");
+            console.log("Tick, now drawing with: " + FPS + "fps!");
             snake.draw();
+            snake.updateSnake();
+            //snake.update();
+            captureKeystrokes(privateCanvas);
         }
     }
 
@@ -49,8 +52,9 @@ var game = (function () {
     /* Todo: Call this function only after player has pressed the start key */
     function privateStartGame() {
         /* Todo: initialize objects (i.e. apple, snake, counter) here */
-        snake = new snakeElement(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
-        captureKeystrokes(privateCanvas);
+        //snake = new snakeElement(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
+        snake = new snakeHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
+        snake.setupSnake();
         window.requestAnimationFrame(privateDraw);
     }
 
@@ -67,32 +71,43 @@ var game = (function () {
         canvas.focus();
         canvas.addEventListener("keydown", keyPressed, false);
     }
-
+    
     function keyPressed(keyEvent) {
         var key = keyEvent.keyCode;
 
         switch (key) {
             /* To do: while-schleife, während noch keine andere Taste gedrückt wurde */
-            case MOVE_UP:
-                snake.moveUp();
-                console.log("Up");
+            case UP:
+                snake.setDirection(UP);
                 break;
-            case MOVE_RIGHT:
-                snake.moveRight();
-                console.log("Right");
+            case RIGHT:
+                snake.setDirection(RIGHT);
                 break;
-            case MOVE_DOWN:
-                snake.moveDown();
-                console.log("Down");
+            case DOWN:
+                snake.setDirection(DOWN);
                 break;
-            case MOVE_LEFT:
-                snake.moveLeft();
-                console.log("Left");
+            case LEFT:
+                snake.setDirection(LEFT);
                 break;
         }
     }
+    
+    function getGameWidth (){
+        return GAME_WIDTH;
+    }
+    
+    function getGameHeight (){
+        return GAME_HEIGHT;
+    }
+    
+    function getContext() {
+        return privateContext;
+    }
 
     return {
-        init: publicInit
+        init: publicInit,
+        getGameWidth: getGameWidth,
+        getGameHeight: getGameHeight,
+        getContext: getContext
     };
 })();
