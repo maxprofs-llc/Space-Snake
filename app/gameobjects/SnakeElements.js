@@ -12,31 +12,8 @@ var snakeElement = function (elemWidth, elemHeight, canvasWidth, canvasHeight, x
 
     this.xPos = xPos;
     this.yPos = yPos;
-
-    /* key codes */
-    var UP = 38; //Arrow up
-    var RIGHT = 39; //Arrow right
-    var LEFT = 37; //Arrow left
-    var DOWN = 40; //Arrow down
-
-}
-/*
-snakeElement.prototype.setDirection = function (direction) {
-    this.direction = direction;
-    console.log(this.direction);
 }
 
-snakeElement.prototype.getDirection = function () {
-    if (this.direction == this.UP)
-        return this.UP;
-    if (this.direction == this.DOWN)
-        return this.DOWN;
-    if (this.direction == this.LEFT)
-        return this.LEFT;
-    if (this.direction == this.RIGHT)
-        return this.RIGHT;
-}
-*/
 snakeElement.prototype.getXPos = function () {
     return this.xPos;
 }

@@ -24,10 +24,15 @@ var game = (function () {
     var RIGHT = 39; //Arrow right
     var LEFT = 37; //Arrow left
     var DOWN = 40; //Arrow down
+    var RESTART = 27;
+
+    var stopGame = false;
 
     // Draws the canvas
     function privateDraw() {
-        //privateContext.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        if (stopGame)
+            return;
+
         window.requestAnimationFrame(privateDraw);
 
         now = Date.now();
@@ -38,7 +43,10 @@ var game = (function () {
             console.log("Tick, now drawing with: " + FPS + "fps!");
             snake.draw();
             snake.updateSnake();
-            //snake.update();
+            if (snake.checkWallCollisions()) { // || snake.checkSelfCollisions()) {
+                stopGame = true;
+                gameOver();
+            }
             captureKeystrokes(privateCanvas);
         }
     }
@@ -52,7 +60,6 @@ var game = (function () {
     /* Todo: Call this function only after player has pressed the start key */
     function privateStartGame() {
         /* Todo: initialize objects (i.e. apple, snake, counter) here */
-        //snake = new snakeElement(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
         snake = new snakeHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
         snake.setupSnake();
         window.requestAnimationFrame(privateDraw);
@@ -71,43 +78,46 @@ var game = (function () {
         canvas.focus();
         canvas.addEventListener("keydown", keyPressed, false);
     }
-    
+
     function keyPressed(keyEvent) {
         var key = keyEvent.keyCode;
-
+        /* Opposite directions not allowed, same directions don't have to be checked */
         switch (key) {
-            /* To do: while-schleife, während noch keine andere Taste gedrückt wurde */
             case UP:
-                snake.setDirection(UP);
+                if (snake.getDirection() != DOWN && snake.getDirection() != UP) {
+                    snake.setDirection(UP);
+                }
                 break;
             case RIGHT:
-                snake.setDirection(RIGHT);
+                if (snake.getDirection() != LEFT && snake.getDirection() != RIGHT) {
+                    snake.setDirection(RIGHT);
+                }
                 break;
             case DOWN:
-                snake.setDirection(DOWN);
+                if (snake.getDirection() != UP && snake.getDirection() != DOWN) {
+                    snake.setDirection(DOWN);
+                }
                 break;
             case LEFT:
-                snake.setDirection(LEFT);
+                if (snake.getDirection() != RIGHT && snake.getDirection() != LEFT) {
+                    snake.setDirection(LEFT);
+                }
                 break;
+            case RESTART:
+                if (stopGame == true) {
+                    privateContext.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+                    stopGame = false;
+                    privateStartGame();
+                }
         }
     }
-    
-    function getGameWidth (){
-        return GAME_WIDTH;
-    }
-    
-    function getGameHeight (){
-        return GAME_HEIGHT;
-    }
-    
-    function getContext() {
-        return privateContext;
+
+    function gameOver() {
+        privateContext.font = "30px Arial";
+        privateContext.fillText("Game Over!", 50, 50);
     }
 
     return {
         init: publicInit,
-        getGameWidth: getGameWidth,
-        getGameHeight: getGameHeight,
-        getContext: getContext
     };
 })();

@@ -22,40 +22,40 @@ snakeHandler.prototype.draw = function () {
 }
 
 snakeHandler.prototype.setupSnake = function () {
-    var headElement = new snakeElement(10, 10, this.canvasWidth, this.canvasHeight, 10, 10, this.context);
-    var middleElement = new snakeElement(10, 10, this.canvasWidth, this.canvasHeight, 20, 10, this.context);
-    var tailElement = new snakeElement(10, 10, this.canvasWidth, this.canvasHeight, 30, 10, this.context);
+    var tailElement = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, 10, 10, this.context);
+    var middleElement = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, 20, 10, this.context);
+    var secondMiddleElement = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, 30, 10, this.context);
+    var headElement = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, 40, 10, this.context);
 
-    this.snakeArray[0] = headElement;
+    this.snakeArray[0] = tailElement;
     this.snakeArray[1] = middleElement;
-    this.snakeArray[2] = tailElement;
+    this.snakeArray[2] = secondMiddleElement;
+    this.snakeArray[3] = headElement;
 }
 
 snakeHandler.prototype.updateSnake = function () {
     var oldHead = this.snakeArray[this.snakeArray.length - 1];
-    
+    var oldTail;
+    var oldDirection = this.direction;
+
     switch (this.direction) {
         case this.UP:
             var newHead = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, oldHead.xPos, oldHead.yPos - this.elemHeight, this.context)
-            this.snakeArray.push(newHead);
-            this.snakeArray.shift();
             break;
         case this.DOWN:
             var newHead = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, oldHead.xPos, oldHead.yPos + this.elemHeight, this.context)
-            this.snakeArray.push(newHead);
-            this.snakeArray.shift();
             break;
         case this.RIGHT:
             var newHead = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, oldHead.xPos + this.elemWidth, oldHead.yPos, this.context)
-            this.snakeArray.push(newHead);
-            this.snakeArray.shift();
             break;
         case this.LEFT:
             var newHead = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, oldHead.xPos - this.elemWidth, oldHead.yPos, this.context)
-            this.snakeArray.push(newHead);
-            this.snakeArray.shift();
             break;
     }
+    this.snakeArray.push(newHead);
+    oldTail = this.snakeArray.shift();
+    /* -1, -1, +2, +2 in order to remove residue from rectangle in Google Chrome */
+    this.context.clearRect(oldTail.xPos - 1, oldTail.yPos - 1, this.elemWidth + 2, this.elemHeight + 2);
 }
 
 snakeHandler.prototype.setDirection = function (direction) {
@@ -64,49 +64,40 @@ snakeHandler.prototype.setDirection = function (direction) {
 }
 
 snakeHandler.prototype.getDirection = function () {
+    if (this.direction == this.LEFT) {
+        return this.LEFT;
+    }
+    if (this.direction == this.RIGHT) {
+        return this.RIGHT;
+    }
+    if (this.direction == this.UP) {
+        return this.UP;
+    }
+    if (this.direction == this.DOWN) {
+        return this.DOWN;
+    }
+}
 
-    console.log(this.direction);
+snakeHandler.prototype.reset = function () {
+    this.snakeArray = [];
+}
+
+snakeHandler.prototype.checkWallCollisions = function () {
+    if (this.direction == this.RIGHT && this.snakeArray[this.snakeArray.length - 1].xPos > this.canvasWidth - this.elemWidth)
+        return true;
+    if (this.direction == this.LEFT && this.snakeArray[this.snakeArray.length - 1].xPos < 0)
+        return true;
+    if (this.direction == this.UP && this.snakeArray[this.snakeArray.length - 1].yPos < 0)
+        return true;
+    if (this.direction == this.DOWN && this.snakeArray[this.snakeArray.length - 1].yPos > this.canvasHeight - this.elemHeight)
+        return true;
+
 }
 /*
-var snakeHandler = (function() {
-    var snake = [];
-    var numberOfElements = 3;
-    var GAME_HEIGHT = 300;
-    var GAME_WIDTH = 300;
-    
-    var direction;
-    
-    function draw() {
-        context.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        drawSnake();
+snakeHandler.prototype.checkSelfCollisions = function () {
+    for(var i = 0; i < this.snakeArray.length; i++) {
+        if((this.snakeArray[this.snakeArray.length - 1].xPos == this.snakeArray[i].xPos) && this.snakeArray[this.snakeArray.length - 1].yPos == this.snakeArray[i].yPos)
+            return true;
     }
-    
-    function drawSnake() {
-        for (var i = 0; i < numberOfElements; i++) {
-            snake[i].draw();
-        }
-    }
-        
-    function setupSnake() {
-        var headElement = new snakeElement(10, 10, GAME_WIDTH, GAME_HEIGHT, game.getContext);
-        headElement.setxPos(10);
-        headElement.setyPos(10);
-        var middleElement = new snakeElement(10, 10, GAME_WIDTH, GAME_HEIGHT, game.getContext);
-        middleElement.setxPos(20);
-        middleElement.setyPos(10);
-        var tailElement = new snakeElement(10, 10, GAME_WIDTH, GAME_HEIGHT, game.getContext);
-        tailElement.setxPos(30);
-        tailElement.setyPos(10);
-        
-        snake[0] = headElement;
-        snake[1] = middleElement;
-        snake[2] = tailElement;
-    }
-    
-    return {
-        setupSnake: setupSnake
-    }
-        
-
-})();
+}
 */
