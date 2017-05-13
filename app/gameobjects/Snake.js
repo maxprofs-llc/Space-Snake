@@ -93,11 +93,13 @@ snakeHandler.prototype.checkWallCollisions = function () {
         return true;
 
 }
-/*
+
 snakeHandler.prototype.checkSelfCollisions = function () {
-    for(var i = 0; i < this.snakeArray.length; i++) {
-        if((this.snakeArray[this.snakeArray.length - 1].xPos == this.snakeArray[i].xPos) && this.snakeArray[this.snakeArray.length - 1].yPos == this.snakeArray[i].yPos)
+    var headElement = this.snakeArray[this.snakeArray.length - 1];
+    
+    for(var i = 0; i < this.snakeArray.length - 1; i++) {
+        if(headElement.xPos == this.snakeArray[i].xPos && headElement.yPos == this.snakeArray[i].yPos)
             return true;
     }
 }
-*/
+

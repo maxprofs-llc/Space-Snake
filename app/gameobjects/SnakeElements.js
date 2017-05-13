@@ -14,21 +14,6 @@ var snakeElement = function (elemWidth, elemHeight, canvasWidth, canvasHeight, x
     this.yPos = yPos;
 }
 
-snakeElement.prototype.getXPos = function () {
-    return this.xPos;
-}
-
-snakeElement.prototype.getYPos = function () {
-    return this.yPos;
-}
-
-snakeElement.prototype.setxPos = function (xPos) {
-    this.xPos = xPos;
-}
-snakeElement.prototype.setyPos = function (yPos) {
-    this.yPos = yPos;
-}
-
 snakeElement.prototype.draw = function () {
     this.context.fillStyle = this.color;
     this.context.strokeStyle = this.color;

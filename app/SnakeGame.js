@@ -42,8 +42,9 @@ var game = (function () {
             then = now - (delta % interval);
             console.log("Tick, now drawing with: " + FPS + "fps!");
             snake.draw();
+            apple.draw();
             snake.updateSnake();
-            if (snake.checkWallCollisions()) { // || snake.checkSelfCollisions()) {
+            if (snake.checkWallCollisions() || snake.checkSelfCollisions()) {
                 stopGame = true;
                 gameOver();
             }
@@ -61,6 +62,7 @@ var game = (function () {
     function privateStartGame() {
         /* Todo: initialize objects (i.e. apple, snake, counter) here */
         snake = new snakeHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
+        apple = new appleHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
         snake.setupSnake();
         window.requestAnimationFrame(privateDraw);
     }
