@@ -61,8 +61,8 @@ var game = (function () {
     /* Todo: Call this function only after player has pressed the start key */
     function privateStartGame() {
         /* Todo: initialize objects (i.e. apple, snake, counter) here */
-        snake = new snakeHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
         apple = new appleHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
+        snake = new snakeHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, apple, privateContext);
         snake.setupSnake();
         window.requestAnimationFrame(privateDraw);
     }

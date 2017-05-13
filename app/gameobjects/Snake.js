@@ -1,5 +1,6 @@
-var snakeHandler = function (elemWidth, elemHeight, canvasWidth, canvasHeight, context) {
+var snakeHandler = function (elemWidth, elemHeight, canvasWidth, canvasHeight, apple, context) {
     this.snakeArray = [];
+    this.apple = apple;
     this.elemWidth = elemWidth;
     this.elemHeight = elemHeight;
 
@@ -34,6 +35,7 @@ snakeHandler.prototype.setupSnake = function () {
 }
 
 snakeHandler.prototype.updateSnake = function () {
+    /* Todo: Apple has to be removed, once eaten. Maybe move to another function */
     var oldHead = this.snakeArray[this.snakeArray.length - 1];
     var oldTail;
     var oldDirection = this.direction;
@@ -53,9 +55,13 @@ snakeHandler.prototype.updateSnake = function () {
             break;
     }
     this.snakeArray.push(newHead);
-    oldTail = this.snakeArray.shift();
-    /* -1, -1, +2, +2 in order to remove residue from rectangle in Google Chrome */
-    this.context.clearRect(oldTail.xPos - 1, oldTail.yPos - 1, this.elemWidth + 2, this.elemHeight + 2);
+    if (oldHead.xPos != this.apple.xPos || oldHead.yPos != this.apple.yPos) {
+        oldTail = this.snakeArray.shift();
+        /* -1, -1, +2, +2 in order to remove residue from rectangle in Google Chrome */
+        this.context.clearRect(oldTail.xPos - 1, oldTail.yPos - 1, this.elemWidth + 2, this.elemHeight + 2);
+    } else {
+        var newHead = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, this.apple.xPos - this.elemWidth, this.apple.yPos, this.context)
+    }
 }
 
 snakeHandler.prototype.setDirection = function (direction) {
@@ -83,23 +89,27 @@ snakeHandler.prototype.reset = function () {
 }
 
 snakeHandler.prototype.checkWallCollisions = function () {
-    if (this.direction == this.RIGHT && this.snakeArray[this.snakeArray.length - 1].xPos > this.canvasWidth - this.elemWidth)
+    var headElement = this.snakeArray[this.snakeArray.length - 1];
+    if (this.direction == this.RIGHT && headElement.xPos > this.canvasWidth - this.elemWidth)
         return true;
-    if (this.direction == this.LEFT && this.snakeArray[this.snakeArray.length - 1].xPos < 0)
+    if (this.direction == this.LEFT && headElement.xPos < 0)
         return true;
-    if (this.direction == this.UP && this.snakeArray[this.snakeArray.length - 1].yPos < 0)
+    if (this.direction == this.UP && headElement.yPos < 0)
         return true;
-    if (this.direction == this.DOWN && this.snakeArray[this.snakeArray.length - 1].yPos > this.canvasHeight - this.elemHeight)
+    if (this.direction == this.DOWN && headElement.yPos > this.canvasHeight - this.elemHeight)
         return true;
 
 }
 
 snakeHandler.prototype.checkSelfCollisions = function () {
     var headElement = this.snakeArray[this.snakeArray.length - 1];
-    
-    for(var i = 0; i < this.snakeArray.length - 1; i++) {
-        if(headElement.xPos == this.snakeArray[i].xPos && headElement.yPos == this.snakeArray[i].yPos)
+
+    for (var i = 0; i < this.snakeArray.length - 1; i++) {
+        if (headElement.xPos == this.snakeArray[i].xPos && headElement.yPos == this.snakeArray[i].yPos)
             return true;
     }
 }
 
+snakeHandler.prototype.eatApple = function () {
+
+}
