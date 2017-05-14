@@ -24,3 +24,7 @@ appleHandler.prototype.draw = function () {
     this.context.strokeStyle = this.color;
     this.context.fillRect(this.xPos, this.yPos, this.elemWidth, this.elemHeight);
 }
+
+appleHandler.prototype.setNewApple = function () {
+    
+}

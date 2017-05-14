@@ -25,8 +25,9 @@ var game = (function () {
     var LEFT = 37; //Arrow left
     var DOWN = 40; //Arrow down
     var RESTART = 27;
+    var SPACE = 32;
 
-    var stopGame = false;
+    var stopGame = true;
 
     // Draws the canvas
     function privateDraw() {
@@ -43,16 +44,22 @@ var game = (function () {
             console.log("Tick, now drawing with: " + FPS + "fps!");
             snake.draw();
             apple.draw();
+            counter.draw();
             snake.updateSnake();
             if (snake.checkWallCollisions() || snake.checkSelfCollisions()) {
                 stopGame = true;
                 gameOver();
             }
+            if (snake.eatApple()) {
+                apple = new appleHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext); 
+                snake.setNewApple(apple);
+                counter.increase();
+            }
             captureKeystrokes(privateCanvas);
         }
     }
 
-    // Setzt den Canvas und dessen Context als Variablen
+    // Sets canvas and its context as variables
     function privateSetContext(canvas) {
         privateCanvas = canvas;
         privateContext = canvas.getContext("2d");
@@ -60,10 +67,10 @@ var game = (function () {
 
     /* Todo: Call this function only after player has pressed the start key */
     function privateStartGame() {
-        /* Todo: initialize objects (i.e. apple, snake, counter) here */
         apple = new appleHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
         snake = new snakeHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, apple, privateContext);
         snake.setupSnake();
+        counter = new counterHandler(privateContext);
         window.requestAnimationFrame(privateDraw);
     }
 
@@ -71,6 +78,10 @@ var game = (function () {
         GAME_HEIGHT = canvas.height;
         GAME_WIDTH = canvas.width;
         privateSetContext(canvas);
+        captureKeystrokes(privateCanvas);
+        privateContext.fillStyle = "white";
+        privateContext.font = "20px Arial";
+        privateContext.fillText("To Start Press Escape", 50, 150);
         privateStartGame();
     }
 
@@ -115,8 +126,9 @@ var game = (function () {
     }
 
     function gameOver() {
-        privateContext.font = "30px Arial";
-        privateContext.fillText("Game Over!", 50, 50);
+        privateContext.fillStyle = "white";
+        privateContext.font = "15px Arial";
+        privateContext.fillText("Game Over! Press ESC to restart", 35, 150);
     }
 
     return {

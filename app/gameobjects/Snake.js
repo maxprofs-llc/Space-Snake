@@ -55,18 +55,17 @@ snakeHandler.prototype.updateSnake = function () {
             break;
     }
     this.snakeArray.push(newHead);
-    if (oldHead.xPos != this.apple.xPos || oldHead.yPos != this.apple.yPos) {
+    if (!this.eatApple()) {
         oldTail = this.snakeArray.shift();
         /* -1, -1, +2, +2 in order to remove residue from rectangle in Google Chrome */
         this.context.clearRect(oldTail.xPos - 1, oldTail.yPos - 1, this.elemWidth + 2, this.elemHeight + 2);
     } else {
-        var newHead = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, this.apple.xPos - this.elemWidth, this.apple.yPos, this.context)
+        var newHead = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, this.apple.xPos - this.elemWidth, this.apple.yPos, this.context);
     }
 }
 
 snakeHandler.prototype.setDirection = function (direction) {
     this.direction = direction;
-    console.log(this.direction);
 }
 
 snakeHandler.prototype.getDirection = function () {
@@ -111,5 +110,15 @@ snakeHandler.prototype.checkSelfCollisions = function () {
 }
 
 snakeHandler.prototype.eatApple = function () {
-
+    var oldHead = this.snakeArray[this.snakeArray.length - 1];
+    
+    if(oldHead.xPos == this.apple.xPos && oldHead.yPos == this.apple.yPos)
+        return true;
+    else
+        return false;
 }
+
+snakeHandler.prototype.setNewApple = function (apple) {
+    this.apple = apple;
+}
+                                                
