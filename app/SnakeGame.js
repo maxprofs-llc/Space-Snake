@@ -27,11 +27,14 @@ var game = (function () {
     var RESTART = 27;
     var SPACE = 32;
 
-    var stopGame = true;
+    var gameOver = false;
+    var firstStart = true;
+
+    var music = new Audio("/music/snakeplayback.mp3");
 
     // Draws the canvas
     function privateDraw() {
-        if (stopGame)
+        if (gameOver)
             return;
 
         window.requestAnimationFrame(privateDraw);
@@ -47,11 +50,13 @@ var game = (function () {
             counter.draw();
             snake.updateSnake();
             if (snake.checkWallCollisions() || snake.checkSelfCollisions()) {
-                stopGame = true;
-                gameOver();
+                gameOver = true;
+                setGameOver();
             }
             if (snake.eatApple()) {
-                apple = new appleHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext); 
+                var appleSound = new Audio("/music/apple.wav");
+                appleSound.play();
+                apple = new appleHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
                 snake.setNewApple(apple);
                 counter.increase();
             }
@@ -78,11 +83,16 @@ var game = (function () {
         GAME_HEIGHT = canvas.height;
         GAME_WIDTH = canvas.width;
         privateSetContext(canvas);
+
         captureKeystrokes(privateCanvas);
+
         privateContext.fillStyle = "white";
         privateContext.font = "20px Arial";
-        privateContext.fillText("To Start Press Escape", 50, 150);
-        privateStartGame();
+        privateContext.fillText("To Start Press Space", 50, 150);
+
+        //musicLoop();
+
+        //privateStartGame();
     }
 
     function captureKeystrokes(canvas) {
@@ -117,15 +127,43 @@ var game = (function () {
                 }
                 break;
             case RESTART:
-                if (stopGame == true) {
+                if (gameOver == true && firstStart == false) {
                     privateContext.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-                    stopGame = false;
+                    gameOver = false;
+                    privateStartGame();
+                    musicLoop();
+                }
+                break;
+            case SPACE:
+                if (firstStart == true) {
+                    firstStart = false;
+                    musicLoop();
                     privateStartGame();
                 }
+                break;
         }
     }
 
-    function gameOver() {
+    function musicLoop() {
+        /* Music loop with buffer for seamless play */
+
+        music.addEventListener('timeupdate', function () {
+            var buffer = .38;
+            if (this.currentTime > this.duration - buffer) {
+                this.currentTime = 0;
+                this.play();
+            }
+        }, false);
+        music.play();
+    }
+
+    function setGameOver() {
+        music.pause();
+        music.currentTime = 0;
+
+        var gameOverSound = new Audio("/music/GameOver.wav");
+        gameOverSound.play();
+
         privateContext.fillStyle = "white";
         privateContext.font = "15px Arial";
         privateContext.fillText("Game Over! Press ESC to restart", 35, 150);

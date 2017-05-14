@@ -13,3 +13,7 @@ body {
 	color: white;
 	font-family: 'Roboto Condensed Light';
 }
+
+footer {
+    margin-left: 30px;
+}
