@@ -102,7 +102,7 @@ snakeHandler.prototype.checkWallCollisions = function () {
 
 snakeHandler.prototype.checkSelfCollisions = function () {
     var headElement = this.snakeArray[this.snakeArray.length - 1];
-
+    /* length - 2 because head element doesn't have to be checked */
     for (var i = 0; i < this.snakeArray.length - 1; i++) {
         if (headElement.xPos == this.snakeArray[i].xPos && headElement.yPos == this.snakeArray[i].yPos)
             return true;

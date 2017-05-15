@@ -30,7 +30,9 @@ var game = (function () {
     var gameOver = false;
     var firstStart = true;
 
-    var music = new Audio("/music/snakeplayback.mp3");
+    var music = new Audio("music/snakeplayback.mp3");
+    var appleSound = new Audio("music/apple.wav");
+    var gameOverSound = new Audio("music/GameOver.wav");
 
     // Draws the canvas
     function privateDraw() {
@@ -54,7 +56,6 @@ var game = (function () {
                 setGameOver();
             }
             if (snake.eatApple()) {
-                var appleSound = new Audio("/music/apple.wav");
                 appleSound.play();
                 apple = new appleHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
                 snake.setNewApple(apple);
@@ -88,7 +89,9 @@ var game = (function () {
 
         privateContext.fillStyle = "white";
         privateContext.font = "20px Arial";
-        privateContext.fillText("To Start Press Space", 50, 150);
+        privateContext.textAlign = "center";
+        privateContext.textBaseline = "middle";
+        privateContext.fillText("To Start Press Space", canvas.width/2, canvas.height/6);
 
         //musicLoop();
 
@@ -138,6 +141,7 @@ var game = (function () {
                 if (firstStart == true) {
                     firstStart = false;
                     musicLoop();
+                    privateContext.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
                     privateStartGame();
                 }
                 break;
@@ -148,7 +152,7 @@ var game = (function () {
         /* Music loop with buffer for seamless play */
 
         music.addEventListener('timeupdate', function () {
-            var buffer = .38;
+            var buffer = .31;
             if (this.currentTime > this.duration - buffer) {
                 this.currentTime = 0;
                 this.play();
@@ -161,12 +165,11 @@ var game = (function () {
         music.pause();
         music.currentTime = 0;
 
-        var gameOverSound = new Audio("/music/GameOver.wav");
         gameOverSound.play();
 
         privateContext.fillStyle = "white";
         privateContext.font = "15px Arial";
-        privateContext.fillText("Game Over! Press ESC to restart", 35, 150);
+        privateContext.fillText("Game Over! Press ESC to restart", canvas.width/2, canvas.height/2);
     }
 
     return {
