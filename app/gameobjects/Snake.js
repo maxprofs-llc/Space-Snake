@@ -23,6 +23,7 @@ snakeHandler.prototype.draw = function () {
 }
 
 snakeHandler.prototype.setupSnake = function () {
+    /* TODO: Create elements relative to Canvas size */
     var tailElement = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, 10, 10, this.context);
     var middleElement = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, 20, 10, this.context);
     var secondMiddleElement = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, 30, 10, this.context);
@@ -35,7 +36,6 @@ snakeHandler.prototype.setupSnake = function () {
 }
 
 snakeHandler.prototype.updateSnake = function () {
-    /* Todo: Apple has to be removed, once eaten. Maybe move to another function */
     var oldHead = this.snakeArray[this.snakeArray.length - 1];
     var oldTail;
     var oldDirection = this.direction;
@@ -83,10 +83,6 @@ snakeHandler.prototype.getDirection = function () {
     }
 }
 
-snakeHandler.prototype.reset = function () {
-    this.snakeArray = [];
-}
-
 snakeHandler.prototype.checkWallCollisions = function () {
     var headElement = this.snakeArray[this.snakeArray.length - 1];
     if (this.direction == this.RIGHT && headElement.xPos > this.canvasWidth - this.elemWidth)
@@ -102,7 +98,6 @@ snakeHandler.prototype.checkWallCollisions = function () {
 
 snakeHandler.prototype.checkSelfCollisions = function () {
     var headElement = this.snakeArray[this.snakeArray.length - 1];
-    /* length - 2 because head element doesn't have to be checked */
     for (var i = 0; i < this.snakeArray.length - 1; i++) {
         if (headElement.xPos == this.snakeArray[i].xPos && headElement.yPos == this.snakeArray[i].yPos)
             return true;
@@ -121,4 +116,4 @@ snakeHandler.prototype.eatApple = function () {
 snakeHandler.prototype.setNewApple = function (apple) {
     this.apple = apple;
 }
-                                                
+                                               

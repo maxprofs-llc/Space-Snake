@@ -1,17 +1,7 @@
 /* Start the Snake game from here! */
 window.onload = function () {
-    var canvas = document.querySelector("#canvas");
-    game.init(canvas);
+    var canvas1 = document.querySelector("#canvas1");
+    var canvas2 = document.querySelector("#canvas2");
+    game.init(canvas1);
+    starsimulator.init(canvas2);
 }
-/*    var music = new Audio("/music/snakeplayback.mp3");
-    
-     Music loop with buffer for seamless play 
-    music.addEventListener('timeupdate', function () {
-        var buffer = .38;
-        if (this.currentTime > this.duration - buffer) {
-            this.currentTime = 0;
-            this.play();
-        }
-    }, false);
-    music.play();
-}*/

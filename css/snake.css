@@ -17,3 +17,21 @@ body {
 footer {
     margin-left: 30px;
 }
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.wrapper {
+    position: relative;
+    width: 300px;
+    height: 300px;
+}
+
+.wrapper canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}

@@ -24,15 +24,21 @@ var game = (function () {
     var RIGHT = 39; //Arrow right
     var LEFT = 37; //Arrow left
     var DOWN = 40; //Arrow down
-    var RESTART = 27;
-    var SPACE = 32;
+    var RESTART = 27; // Escape
+    var SPACE = 32; // Space
 
+    /* Start and gameOver booleans */
     var gameOver = false;
     var firstStart = true;
-
+    
+    /* Sound files */
     var music = new Audio("music/snakeplayback.mp3");
     var appleSound = new Audio("music/apple.wav");
     var gameOverSound = new Audio("music/GameOver.wav");
+    
+    /* Images */
+    var snakeLogo = new Image();
+    snakeLogo.src = "images/snakeLogo.png";
 
     // Draws the canvas
     function privateDraw() {
@@ -51,10 +57,14 @@ var game = (function () {
             apple.draw();
             counter.draw();
             snake.updateSnake();
+
+            //updateSpeed();
+
             if (snake.checkWallCollisions() || snake.checkSelfCollisions()) {
                 gameOver = true;
                 setGameOver();
             }
+
             if (snake.eatApple()) {
                 appleSound.play();
                 apple = new appleHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
@@ -86,12 +96,14 @@ var game = (function () {
         privateSetContext(canvas);
 
         captureKeystrokes(privateCanvas);
-
+        
+        privateContext.drawImage(snakeLogo, 0, canvas.height * 0.1);
+        
         privateContext.fillStyle = "white";
         privateContext.font = "20px Arial";
         privateContext.textAlign = "center";
         privateContext.textBaseline = "middle";
-        privateContext.fillText("To Start Press Space", canvas.width/2, canvas.height/6);
+        privateContext.fillText("To Start Press Space", canvas.width / 2, canvas.height * 0.9);
 
         //musicLoop();
 
@@ -169,9 +181,17 @@ var game = (function () {
 
         privateContext.fillStyle = "white";
         privateContext.font = "15px Arial";
-        privateContext.fillText("Game Over! Press ESC to restart", canvas.width/2, canvas.height/2);
+        privateContext.fillText("Game Over! Press ESC to restart", canvas.width / 2, canvas.height / 2);
     }
-
+/* 
+    function updateSpeed() {
+        if (counter.getScore() % 18 == 0) {
+            FPS++;
+            flag++
+            interval = 1000 / FPS;
+        }
+    }
+*/
     return {
         init: publicInit,
     };
