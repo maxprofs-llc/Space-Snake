@@ -7,13 +7,15 @@ var game = (function () {
     var GAME_WIDTH;
     var GAME_HEIGHT;
     var RASTER_SIZE = 10; // i.e. size of snake elements and apples
-
+    var repCounter = 0;
+    
     var snake;
     var apple;
     var counter;
 
     /* Variables and constants to control framerate */
     var FPS = 10; /* change this to change framerate in the game */
+    var maxFPS = 25;
     var now;
     var then = Date.now();
     var interval = 1000 / FPS;
@@ -52,6 +54,7 @@ var game = (function () {
         delta = now - then;
 
         if (delta > interval) {
+            repCounter++;
             then = now - (delta % interval);
             console.log("Tick, now drawing with: " + FPS + "fps!");
             snake.draw();
@@ -59,6 +62,11 @@ var game = (function () {
             counter.draw();
             snake.updateSnake();
             keyPress = false;
+            
+            if(repCounter % 150 == 0 && FPS <= maxFPS) {
+                FPS++;
+                interval = 1000 / FPS;
+            }
 
             if (snake.checkWallCollisions() || snake.checkSelfCollisions()) {
                 gameOver = true;
@@ -145,6 +153,8 @@ var game = (function () {
                 if (gameOver == true && firstStart == false) {
                     privateContext.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
                     gameOver = false;
+                    FPS = 10;
+                    interval = 1000 / FPS;
                     privateStartGame();
                     musicLoop();
                 }
