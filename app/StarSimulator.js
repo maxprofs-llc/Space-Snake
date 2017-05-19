@@ -20,7 +20,6 @@ var starsimulator = (function () {
     }
 
     function draw() {
-        //drawBackground();
         context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         drawstars();
         window.requestAnimationFrame(draw);

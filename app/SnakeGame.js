@@ -30,18 +30,16 @@ var game = (function () {
     /* Start and gameOver booleans */
     var gameOver = false;
     var firstStart = true;
-    
+    var keyPress = false; // <- Allows only one movement per frame in order to prevent invoking "selfeating" before movement is completed
+
     /* Sound files */
     var music = new Audio("music/snakeplayback.mp3");
     var appleSound = new Audio("music/apple.wav");
     var gameOverSound = new Audio("music/GameOver.wav");
-    
+
     /* Images */
     var snakeLogo = new Image();
     snakeLogo.src = "images/snakeLogo.png";
-    
-    var background = new Image();
-    background.src = "images/earthPic.jpg";
 
     // Draws the canvas
     function privateDraw() {
@@ -60,8 +58,7 @@ var game = (function () {
             apple.draw();
             counter.draw();
             snake.updateSnake();
-
-            //updateSpeed();
+            keyPress = false;
 
             if (snake.checkWallCollisions() || snake.checkSelfCollisions()) {
                 gameOver = true;
@@ -98,9 +95,9 @@ var game = (function () {
         privateSetContext(canvas);
 
         captureKeystrokes(privateCanvas);
-        
+
         privateContext.drawImage(snakeLogo, 0, canvas.height * 0.1);
-        
+
         privateContext.fillStyle = "white";
         privateContext.font = "20px Arial";
         privateContext.textAlign = "center";
@@ -118,25 +115,30 @@ var game = (function () {
     function keyPressed(keyEvent) {
         var key = keyEvent.keyCode;
         /* Opposite directions not allowed, same directions don't have to be checked */
+
         switch (key) {
             case UP:
-                if (snake.getDirection() != DOWN && snake.getDirection() != UP) {
+                if (snake.getDirection() != DOWN && snake.getDirection() != UP && keyPress == false) {
                     snake.setDirection(UP);
+                    keyPress = true;
                 }
                 break;
             case RIGHT:
-                if (snake.getDirection() != LEFT && snake.getDirection() != RIGHT) {
+                if (snake.getDirection() != LEFT && snake.getDirection() != RIGHT && keyPress == false) {
                     snake.setDirection(RIGHT);
+                    keyPress = true;
                 }
                 break;
             case DOWN:
-                if (snake.getDirection() != UP && snake.getDirection() != DOWN) {
+                if (snake.getDirection() != UP && snake.getDirection() != DOWN && keyPress == false) {
                     snake.setDirection(DOWN);
+                    keyPress = true;
                 }
                 break;
             case LEFT:
-                if (snake.getDirection() != RIGHT && snake.getDirection() != LEFT) {
+                if (snake.getDirection() != RIGHT && snake.getDirection() != LEFT && keyPress == false) {
                     snake.setDirection(LEFT);
+                    keyPress = true;
                 }
                 break;
             case RESTART:
@@ -179,17 +181,9 @@ var game = (function () {
 
         privateContext.fillStyle = "white";
         privateContext.font = "15px Arial";
-        privateContext.fillText("Game Over! Press ESC to restart", canvas.width / 2, canvas.height / 2);
+        privateContext.fillText("Game Over! Press ESC to restart", privateCanvas.width / 2, privateCanvas.height / 2);
     }
-    /*
-    function updateSpeed() {
-        if (counter.getScore() % 18 == 0) {
-            FPS++;
-            flag++
-            interval = 1000 / FPS;
-        }
-    }
-*/
+    
     return {
         init: publicInit,
     };

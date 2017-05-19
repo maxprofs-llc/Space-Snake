@@ -56,7 +56,7 @@ snakeHandler.prototype.updateSnake = function () {
     this.snakeArray.push(newHead);
     if (!this.eatApple()) {
         oldTail = this.snakeArray.shift();
-        /* -1, -1, +2, +2 in order to remove residue from rectangle in Google Chrome */
+        /* -1, -1, +2, +2 in order to remove residue from rectangles in Google Chrome */
         this.context.clearRect(oldTail.xPos - 1, oldTail.yPos - 1, this.elemWidth + 2, this.elemHeight + 2);
     } else {
         var newHead = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, this.apple.xPos - this.elemWidth, this.apple.yPos, this.context);
@@ -84,15 +84,18 @@ snakeHandler.prototype.getDirection = function () {
 
 snakeHandler.prototype.checkWallCollisions = function () {
     var headElement = this.snakeArray[this.snakeArray.length - 1];
-    if (this.direction == this.RIGHT && headElement.xPos > this.canvasWidth - this.elemWidth)
+    if (this.direction == this.RIGHT && headElement.xPos > this.canvasWidth - this.elemWidth) {
         return true;
-    if (this.direction == this.LEFT && headElement.xPos < 0)
+    }
+    if (this.direction == this.LEFT && headElement.xPos < 0) {
         return true;
-    if (this.direction == this.UP && headElement.yPos < 0)
+    }
+    if (this.direction == this.UP && headElement.yPos < 0) {
         return true;
-    if (this.direction == this.DOWN && headElement.yPos > this.canvasHeight - this.elemHeight)
+    }
+    if (this.direction == this.DOWN && headElement.yPos > this.canvasHeight - this.elemHeight) {
         return true;
-
+    }
 }
 
 snakeHandler.prototype.checkSelfCollisions = function () {
@@ -105,8 +108,8 @@ snakeHandler.prototype.checkSelfCollisions = function () {
 
 snakeHandler.prototype.eatApple = function () {
     var oldHead = this.snakeArray[this.snakeArray.length - 1];
-    
-    if(oldHead.xPos == this.apple.xPos && oldHead.yPos == this.apple.yPos)
+
+    if (oldHead.xPos == this.apple.xPos && oldHead.yPos == this.apple.yPos)
         return true;
     else
         return false;
@@ -115,4 +118,3 @@ snakeHandler.prototype.eatApple = function () {
 snakeHandler.prototype.setNewApple = function (apple) {
     this.apple = apple;
 }
-                                               
