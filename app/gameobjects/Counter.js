@@ -9,7 +9,6 @@ counterHandler.prototype.increase = function () {
 }
 
 counterHandler.prototype.draw = function () {    
-    /* TODO: Draw score relative to canvas size */
     this.context.fillStyle = "white";
     this.context.font = "16px verdana, sans-serif";
     this.context.fillText("Score: " , 115, 35);

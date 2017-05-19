@@ -39,6 +39,9 @@ var game = (function () {
     /* Images */
     var snakeLogo = new Image();
     snakeLogo.src = "images/snakeLogo.png";
+    
+    var background = new Image();
+    background.src = "images/earthPic.jpg";
 
     // Draws the canvas
     function privateDraw() {
@@ -81,7 +84,6 @@ var game = (function () {
         privateContext = canvas.getContext("2d");
     }
 
-    /* Todo: Call this function only after player has pressed the start key */
     function privateStartGame() {
         apple = new appleHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, privateContext);
         snake = new snakeHandler(RASTER_SIZE, RASTER_SIZE, GAME_WIDTH, GAME_HEIGHT, apple, privateContext);
@@ -104,10 +106,6 @@ var game = (function () {
         privateContext.textAlign = "center";
         privateContext.textBaseline = "middle";
         privateContext.fillText("To Start Press Space", canvas.width / 2, canvas.height * 0.9);
-
-        //musicLoop();
-
-        //privateStartGame();
     }
 
     function captureKeystrokes(canvas) {
@@ -183,7 +181,7 @@ var game = (function () {
         privateContext.font = "15px Arial";
         privateContext.fillText("Game Over! Press ESC to restart", canvas.width / 2, canvas.height / 2);
     }
-/* 
+    /*
     function updateSpeed() {
         if (counter.getScore() % 18 == 0) {
             FPS++;

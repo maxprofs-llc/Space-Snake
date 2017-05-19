@@ -23,7 +23,6 @@ snakeHandler.prototype.draw = function () {
 }
 
 snakeHandler.prototype.setupSnake = function () {
-    /* TODO: Create elements relative to Canvas size */
     var tailElement = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, 10, 10, this.context);
     var middleElement = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, 20, 10, this.context);
     var secondMiddleElement = new snakeElement(this.elemWidth, this.elemHeight, this.canvasWidth, this.canvasHeight, 30, 10, this.context);

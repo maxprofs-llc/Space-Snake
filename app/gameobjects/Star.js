@@ -11,7 +11,7 @@ var Star = function (StarWidth, StarHeight, canvasWidth, canvasHeight, context) 
     this.color = "white";
     this.speed = this.calculateRandomSpeed();
 
-    this.yPos = 0;
+    this.yPos = this.createRandomLane();
     this.xPos = this.createRandomLane();
 };
 
